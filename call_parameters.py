@@ -14,7 +14,6 @@ Dih_List = []
 master_list = []
 
 for i,line in enumerate(inp):
-    print line
     variable, value = line.split('=')
     variable = variable.strip() 
 
