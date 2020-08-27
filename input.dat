@@ -1,0 +1,8 @@
+# PLEASE DO NOT INCLUDE SPACES BEFORE AND AFTER '=' SIGN. PLEASE DO NOT WRITE THE ATOM NUMBERS FOR THE PROPERTY FLAGGED AS FALSE
+address=/home/user/Work/Visualization/ML/successfulfiles
+B_Len=True
+Blen_atom_list=[[1,2],[4,5]]  
+B_Ang=True
+Ang_atom_list=[[1,2,3],[7,8,9],[3,4,5]]
+Dih_Ang=True
+Dih_atom_list=[[1,2,3,4],[5,7,9,8]]
