@@ -2,18 +2,20 @@ import ast
 import BL
 import Angles
 import Dihedral
+import Dipole_moment
 import write_to_csv
 from os import listdir
 from os.path import isfile, join
 
 inp = open("input.dat","r")
+lines = inp.readlines()
 file_list=[]
 BL_List = []
 Ang_List = []
 Dih_List = []
 master_list = []
 
-for i,line in enumerate(inp):
+for i,line in enumerate(lines):
     variable, value = line.split('=')
     variable = variable.strip() 
 
@@ -29,6 +31,7 @@ for i,line in enumerate(inp):
         for x in onlyfiles[:]:
             if x[-4:] == '.log':
                 file_list.append(x)
+                master_list.append([x])
 
     ##    Calculating bond length   ##
 
@@ -43,7 +46,10 @@ for i,line in enumerate(inp):
         at_list = ast.literal_eval(val1)
         BL_List = BL.BL_list(address,file_list,at_list)
         print ("Writing bond lengths to CSV file .....")
-        write_to_csv.write_csv(file_list,BL_List,"CheML_params.csv",address)
+        i = 0
+        for row in master_list:
+            row.extend(BL_List[i])
+            i = i + 1
 
     ##    Calculating bond angle   ##
 
@@ -58,7 +64,10 @@ for i,line in enumerate(inp):
         at_list = ast.literal_eval(val1)
         Ang_List = Angles.Angle_list(address,file_list,at_list)
         print ("Writing bond angles to CSV file .....")
-        write_to_csv.write_csv(file_list,Ang_List,"CheML_params_angles.csv",address)
+        i = 0
+        for row in master_list:
+            row.extend(Ang_List[i])
+            i = i + 1
 
     ##    Calculating dihedral angle   ##
 
@@ -73,12 +82,25 @@ for i,line in enumerate(inp):
         at_list = ast.literal_eval(val1)
         Dih_List = Dihedral.Dihedral_list(address,file_list,at_list)
         print ("Writing dihedral angles to CSV file .....")
-        write_to_csv.write_csv(file_list,Dih_List,"CheML_params_dihedral.csv",address)
+        i = 0
+        for row in master_list:
+            row.extend(Dih_List[i])
+            i = i + 1
+
+    ##    Calculating Dipole Moment   ##
+
+    elif variable == 'Dipole_moment':
+        if value.rstrip() == 'True':
+            print ("Extracting Dipole Moment .....")
+            DM_List = Dipole_moment.DM_list(address,file_list)
+            print ("Writing Dipole moment to CSV file .....")
+            i = 0
+            for row in master_list:
+                row.extend(DM_List[i])
+                i = i + 1
+        else:
+            print ("Dipole moment not needed!")
 
 inp.close()
 
-for i in range(len(file_list)):
-    current_row = [file_list[i]] + BL_List[i][:] + Ang_List[i][:] + Dih_List[i][:]
-    master_list.append(current_row)
-print (master_list)
-
+write_to_csv.write_csv(master_list,"CheML_params_all.csv",address)

@@ -6,3 +6,4 @@ B_Ang=True
 Ang_atom_list=[[1,2,3],[7,8,9],[3,4,5]]
 Dih_Ang=True
 Dih_atom_list=[[1,2,3,4],[5,7,9,8]]
+Dipole_moment=True
